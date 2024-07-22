@@ -4,30 +4,32 @@ import { Square } from "./components/Square.jsx";
 import { TURNS } from "./constants.js";
 import { checkWinnerFrom, checkEndGame } from "./logic/board.js";
 import { WinnerModal } from "./components/WinnerModal.jsx";
-import { saveGameToStorage, resetGameStorage, restartGame } from "./logic/storage/index.js";
+import {
+  saveGameToStorage,
+  resetGameStorage,
+  restartGame,
+} from "./logic/storage/index.js";
 
 function App() {
-  const [board, setBoard] = useState( () => {
-    const boardFromStorage = window.localStorage.getItem('board');
-      return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null);
-    }
-  );
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem("board");
+    return boardFromStorage
+      ? JSON.parse(boardFromStorage)
+      : Array(9).fill(null);
+  });
 
-  const [points, setPoints] = useState( () => {
-    const pointsFromStorage = window.localStorage.getItem('points');
-      return pointsFromStorage ? JSON.parse(pointsFromStorage) : Array(2).fill(0)
-    }
-  );
+  const [points, setPoints] = useState(() => {
+    const pointsFromStorage = window.localStorage.getItem("points");
+    return pointsFromStorage ? JSON.parse(pointsFromStorage) : Array(2).fill(0);
+  });
 
-  const [turn, setTurn] = useState( () => {
-    const turnFromStorage = window.localStorage.getItem('turn');
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = window.localStorage.getItem("turn");
     return turnFromStorage ?? TURNS.X;
-  }
-  );
+  });
 
   // null es que no hay ganador, false es un empate
   const [winner, setWinner] = useState(null);
-
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
@@ -35,22 +37,21 @@ function App() {
     setTurn(TURNS.X);
     setWinner(null);
     resetGameStorage();
-  }
+  };
 
   const playAgain = () => {
     setBoard(Array(9).fill(null));
     setTurn(TURNS.X);
     setWinner(null);
     restartGame();
-  }
-
+  };
 
   const updatePoints = (winner) => {
     const newPoints = [...points];
-    const actualWinner = winner === 'x' ? 0 : 1;
+    const actualWinner = winner === "x" ? 0 : 1;
     newPoints[actualWinner] += 1;
-    setPoints(newPoints)
-  }
+    setPoints(newPoints);
+  };
 
   const updateBoard = (index) => {
     // const newBoard2 = board[index] === null ? newBoard : board; FORMA 1
@@ -65,23 +66,19 @@ function App() {
     saveGameToStorage({
       board: newBoard,
       turn: newTurn,
-      points: points
-    })
-    
+      points: points,
+    });
+
     // Revisar si hay un ganador
     const newWinner = checkWinnerFrom(newBoard);
-    if (newWinner ){
+    if (newWinner) {
       setWinner(newWinner);
-      updatePoints(newWinner)
-      confetti()
+      updatePoints(newWinner);
+      confetti();
     } else if (checkEndGame(newBoard)) {
-      setWinner(false)
+      setWinner(false);
     }
-
-    
-  }
-
-
+  };
 
   return (
     <main className="board">
@@ -91,11 +88,7 @@ function App() {
       <section className="game">
         {board.map((square, index) => {
           return (
-            <Square 
-            key={index} 
-            index={index}
-            updateBoard={updateBoard}
-            >
+            <Square key={index} index={index} updateBoard={updateBoard}>
               {square}
             </Square>
           );
@@ -103,17 +96,20 @@ function App() {
       </section>
       <section className="turn">
         <div>
-          <Square isSelected = {turn === TURNS.X}>{TURNS.X}</Square>
+          <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
           <h2>{points[0]}</h2>
         </div>
         <div>
-          <Square isSelected = {turn === TURNS.O}>{TURNS.O}</Square>
+          <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
           <h2>{points[1]}</h2>
         </div>
       </section>
 
-      <WinnerModal winner={winner} playAgain={playAgain} resetGame={resetGame} />
-
+      <WinnerModal
+        winner={winner}
+        playAgain={playAgain}
+        resetGame={resetGame}
+      />
     </main>
   );
 }
