@@ -15,6 +15,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+#root {
+  width: 100vw;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -88,6 +92,10 @@ body {
   height: 70px;
   pointer-events: none;
   border-color: transparent;
+}
+
+.turn h2 {
+  margin-top: 10px;
 }
 
 .square.is-selected {
