@@ -5,8 +5,7 @@ import { TURNS } from "./constants.js";
 import { checkWinnerFrom, checkEndGame } from "./logic/board.js";
 import { WinnerModal } from "./components/WinnerModal.jsx";
 import {
-  saveGameToStorage,
-  resetGameStorage,
+  saveGameToStorage, resetGameStorage,
   restartGame,
 } from "./logic/storage/index.js";
 
